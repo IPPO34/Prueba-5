@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aventura del Conejito</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        #gameArea {
+            width: 600px;
+            height: 400px;
+            position: relative;
+            background-color: #fff;
+            border: 2px solid #000;
+        }
+        #player {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            top: 180px;
+            left: 285px;
+            background-image: url('https://www.clipartkey.com/mpngs/m/137-1373587_cartoon-rabbit-png-cartoon-rabbit-clipart.png'); /* Imagen de un conejito */
+            background-size: cover;
+        }
+        .mensaje {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #333;
+            font-size: 18px;
+            font-family: Arial, sans-serif;
+        }
+        .nivel {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameArea">
+        <div id="player"></div>
+        <div class="mensaje" id="mensaje">¡Usa las teclas de flecha para mover al conejito!</div>
+        <div class="nivel" id="nivel">Nivel: 1</div>
+    </div>
+
+    <script>
+        // Variables del juego
+        const player = document.getElementById('player');
+        const gameArea = document.getElementById('gameArea');
+        const mensaje = document.getElementById('mensaje');
+        const nivelTexto = document.getElementById('nivel');
+
+        const gameWidth = gameArea.clientWidth;
+        const gameHeight = gameArea.clientHeight;
+        const playerSize = 40;
+
+        let posX = 285;
+        let posY = 180;
+        let nivel = 1;
+
+        // Mover al conejito
+        function moverJugador() {
+            player.style.left = posX + 'px';
+            player.style.top = posY + 'px';
+        }
+
+        // Cambiar de nivel
+        function cambiarNivel() {
+            if (nivel === 1 && posX >= 500) {
+                nivel = 2;
+                mensaje.innerText = '¡Nivel 2! ¡Sigue moviéndote!';
+                nivelTexto.innerText = 'Nivel: 2';
+                posX = 50;  // Colocamos al conejito en la posición inicial del nuevo nivel
+            } else if (nivel === 2 && posX >= 500) {
+                nivel = 3;
+                mensaje.innerText = '¡Nivel 3! ¡Casi lo logras!';
+                nivelTexto.innerText = 'Nivel: 3';
+                posX = 50;  // Colocamos al conejito en la posición inicial del nuevo nivel
+            } else if (nivel === 3 && posX >= 500) {
+                mensaje.innerText = '¡Felicidades! Has llegado al final...';
+                nivelTexto.innerText = 'Nivel: 3';
+                mostrarPregunta();
+            }
+        }
+
+        // Función para mostrar la pregunta al final
+        function mostrarPregunta() {
+            setTimeout(() => {
+                mensaje.innerText = '¿Quieres ser mi novia?';
+                let botonAceptar = document.createElement('button');
+                botonAceptar.innerText = 'Sí';
+                botonAceptar.onclick = function() {
+                    alert('¡Lo lograste! Mi respuesta es... ¡Sí, quiero ser tu novia!');
+                };
+                document.body.appendChild(botonAceptar);
+            }, 500);
+        }
+
+        // Capturar las teclas presionadas
+        window.addEventListener('keydown', function(e) {
+            switch (e.key) {
+                case 'ArrowUp':
+                    if (posY > 0) posY -= 10;  // Mueve hacia arriba
+                    break;
+                case 'ArrowDown':
+                    if (posY < gameHeight - playerSize) posY += 10;  // Mueve hacia abajo
+                    break;
+                case 'ArrowLeft':
+                    if (posX > 0) posX -= 10;  // Mueve hacia la izquierda
+                    break;
+                case 'ArrowRight':
+                    if (posX < gameWidth - playerSize) posX += 10;  // Mueve hacia la derecha
+                    break;
+            }
+            moverJugador();
+            cambiarNivel();
+        });
+
+    </script>
+</body>
+</html>
